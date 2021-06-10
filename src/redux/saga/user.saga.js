@@ -210,7 +210,7 @@ function* changePasswordSaga(action){
 
 function* getUserListSaga() {
   try {
-    const result = yield axios.get('http://localhost:3001/users?_embed=orders')
+    const result = yield axios.get(URL + '/users?_embed=orders')
     yield put({
       type: 'GET_USER_LIST_SUCCESS',
       payload: {

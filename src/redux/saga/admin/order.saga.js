@@ -1,12 +1,14 @@
 import { put, takeEvery } from 'redux-saga/effects';
 import axios from 'axios';
 
+import {URL} from '../../../contrains/App.js'
+
 function* changeStatusSaga(action) {
   try {
     const { id,status } = action.payload
     const result = yield axios({
       method: 'PATCH',
-      url: `http://localhost:3001/orders/${id}`,
+      url: URL + `/orders/${id}`,
       data: {
         status,
       }
@@ -29,7 +31,7 @@ function* changeStatusSaga(action) {
 }
 function* getOrderSaga() {
   try {
-    const result = yield axios.get(`http://localhost:3001/orders?_expand=user`)
+    const result = yield axios.get(URL + `/orders?_expand=user`)
     if(result.data) {
       yield put ({
         type: 'GET_ORDER_SUCCESS',
@@ -59,7 +61,7 @@ function* getOrderFilterSaga(action) {
     const {status} = action.payload
     const result = yield axios({
       method: 'GET',
-      url: `http://localhost:3001/orders`,
+      url: URL + `/orders`,
       params: {
         _expand: 'user',
         status: status

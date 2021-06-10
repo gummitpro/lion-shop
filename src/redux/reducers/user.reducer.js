@@ -9,6 +9,12 @@ const initialState = {
       data: [],
       load: false,
       error: '',
+   },
+
+   userList:{
+      data: [],
+      load: false,
+      error: '',
    }
 };
 

@@ -1,11 +1,11 @@
 import { put, takeEvery } from 'redux-saga/effects';
 import axios from 'axios';
-
+import {URL} from '../../../contrains/App.js'
 function* getProductListAdminSaga(action) {
   try {
     const result = yield axios({
       method: 'GET',
-      url: `http://localhost:3001/products`,
+      url: URL + `/products`,
       params: {
         _expand: 'category',
 
@@ -34,7 +34,7 @@ function* getProductFilterAdminSaga(action) {
     const {categoryId} = action.payload
     const result = yield axios({
       method: 'GET',
-      url: `http://localhost:3001/products`,
+      url: URL + `/products`,
       params: {
         _expand: 'category',
         _embed: 'productOptions',
@@ -61,7 +61,7 @@ function* getCategoryListAdminSaga(action) {
   try {
     const result = yield axios({
       method: 'GET',
-      url: 'http://localhost:3001/categories',
+      url: URL + '/categories',
     });
     yield put({
       type: "ADMIN/GET_CATEGORY_LIST_SUCCESS",
@@ -85,7 +85,7 @@ function* createProductAdminSaga(action) {
     console.log("🚀 ~ file: product.saga.js ~ line 55 ~ function*createProductAdminSaga ~ action.payload", action.payload)
     const createResult = yield axios({
       method: 'POST',
-      url: 'http://localhost:3001/products',
+      url: URL + '/products',
       data: {
         name,
         categoryId,
@@ -118,7 +118,7 @@ function* editProductAdminSaga(action) {
     const { id, name, categoryId, price, inventory, specifications, des, image } = action.payload;
     const editResult = yield axios({
       method: 'PATCH',
-      url: `http://localhost:3001/products/${id}`,
+      url: URL + `/products/${id}`,
       data: {
         name,
         categoryId,
@@ -151,7 +151,7 @@ function* deleteProductAdminSaga(action) {
     const { id } = action.payload;
     yield axios({
       method: 'DELETE',
-      url: `http://localhost:3001/products/${id}`,
+      url: URL + `/products/${id}`,
     });
     yield put({ type: "ADMIN/GET_PRODUCT_LIST_REQUEST" });
     yield put({
@@ -173,7 +173,7 @@ function* createOptionAdminSaga(action) {
     const { productId, title, price } = action.payload;
     const result = yield axios({
       method: 'POST',
-      url: 'http://localhost:3001/productOptions',
+      url: URL + '/productOptions',
       data: {
         productId,
         title,
@@ -202,7 +202,7 @@ function* editOptionAdminSaga(action) {
     const { id, productId, title, price } = action.payload;
     const result = yield axios({
       method: 'PATCH',
-      url: `http://localhost:3001/productOptions/${id}`,
+      url: URL + `/productOptions/${id}`,
       data: {
         productId,
         title,
@@ -231,7 +231,7 @@ function* deleteOptionAdminSaga(action) {
     const { id } = action.payload;
     yield axios({
       method: 'DELETE',
-      url: `http://localhost:3001/productOptions/${id}`,
+      url: URL + `/productOptions/${id}`,
     });
     yield put({
       type: "ADMIN/DELETE_OPTION_SUCCESS",

@@ -1,10 +1,12 @@
 import { put, takeEvery } from 'redux-saga/effects';
 import axios from 'axios';
 
+import {URL} from '../../../contrains/App.js'
+
 function* removeUserSaga(action) {
   try {
     const { id } = action.payload
-    const result = yield axios.delete(`http://localhost:3001/users/${id}`)
+    const result = yield axios.delete(URL + `/users/${id}`)
     if (result.data) {
       yield put({
         type: 'REMOVE_USER_SUCCESS',
@@ -32,7 +34,7 @@ function* getUserFilterSaga(action) {
     const { status } = action.payload
     const result = yield axios({
       method: 'GET',
-      url: 'http://localhost:3001/users',
+      url: URL + '/users',
       params: {
         status: status,
       }
@@ -55,7 +57,7 @@ function* getUserFilterSaga(action) {
 function* changeStatusUserAdminSaga (action) {
   try {
     const { id, status } = action.payload
-    const result = yield axios.patch(`http://localhost:3001/users/${id}`,{ status })
+    const result = yield axios.patch(URL + `/users/${id}`,{ status })
     if (result.data) {
       yield put({
         type: 'CHANGE_STATUS_USER_SUCCESS',
@@ -83,8 +85,8 @@ function* editUserAdminSaga (action) {
   try {
     const { id, userName, email, newPass, phone, gender } = action.payload
     var result
-    {newPass === "" ? result = yield axios.patch(`http://localhost:3001/users/${id}`,{userName, email, phone, gender})
-    : result = yield axios.patch(`http://localhost:3001/users/${id}`,{userName, email, password: newPass,  phone, gender})
+    {newPass === "" ? result = yield axios.patch(URL + `/users/${id}`,{userName, email, phone, gender})
+    : result = yield axios.patch(URL + `/users/${id}`,{userName, email, password: newPass,  phone, gender})
     }
     localStorage.setItem('userInfo', JSON.stringify(result.data));
     if (result.data) {

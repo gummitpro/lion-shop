@@ -266,6 +266,7 @@ function Index({ shoppingCart, userInfo, paymentTask }) {
 												userId: userInfo.data.id,
 												cart: shoppingCart.data,
 												payment: false,
+												status: 1,
 												currentTime: getCurrentTime(),
 												totalOrder: totalFinalMoney
 											})

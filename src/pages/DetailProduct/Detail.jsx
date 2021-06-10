@@ -30,6 +30,9 @@ function Detail({ productDetail, productListSame, commentList, addToCart, addCom
 	const [imgDef, setImgDef] = useState()
 
 	const [tmpSpecifications, setSpecifications] = useState({})
+
+	const [listComment, setListComment] = useState(commentList.data)
+
 	useEffect(() => {
 
 		setBackgroundChecked({ index: 0, color: "#d6d6e5" })
@@ -46,13 +49,14 @@ function Detail({ productDetail, productListSame, commentList, addToCart, addCom
 
 	useEffect(() => {
 		if (productDetail.data.id) {
+			setListComment(commentList.data)
 			setOptionSelected(productDetail.data.productOptions[0] || {})
 		}
 		setSpecifications(specifications)
 		setImgDef(image)
 	}, [productDetail.data])
 
-	console.log("tmpSpecifications: ", tmpSpecifications)
+	// console.log("tmpSpecifications: ", tmpSpecifications)
 
 	const settings = {
 		dots: false,
@@ -104,7 +108,12 @@ function Detail({ productDetail, productListSame, commentList, addToCart, addCom
 		email: '',
 		contentComment: ''
 	});
-	const [errors, setErrors] = useState({})
+	const [errors, setErrors] = useState({
+		countStar: 0,
+		name: '',
+		email: '',
+		contentComment: ''
+	})
 
 	const [optionSelected, setOptionSelected] = useState({});
 	const [isReadMore, setIsReadMore] = useState(false);
@@ -134,19 +143,104 @@ function Detail({ productDetail, productListSame, commentList, addToCart, addCom
 
 		return datetime;
 	}
-
-	const handleOk = () => {
-		if (values.countStar === 0 || values.name === "" || values.email === "" || values.contentComment === "") {
-			setErrors(validation(values))
-		} else {
-			addComment({ productId: id, inforComment: values, currentTime: getCurrentTime() });
-			setValues({})
-			setIsModalVisible(false);
+	function validateEmail(email) {   
+		var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		return re.test(email);
+  	}
+	function checkProperties(obj) {
+		var count = 0;
+		for (var key in obj) {
+			console.log("obj[key]: ", obj[key])
+			if (obj[key] === "" || obj[key] === 0){
+				count++;
+				console.log(count)
+			}
+				 
 		}
+		if( count > 0){
+			return false;
+		}else{
+			return true
+		}
+		
+  	}
+
+	console.log(values)
+	
+	const handleOk = () => {
+
+		let isValid = true;
+		const newChangeError = {
+			countStar: 0,
+			name: '',
+			email: '',
+			contentComment: ''
+		}
+
+		if(!values.countStar === 0 ){
+			isValid = false;
+			newChangeError.countStar = "Vui lòng chọn số sao để đánh giá";
+		}else{
+			newChangeError.countStar = ""
+		}
+		if(!values.name ){
+			isValid = false;
+			newChangeError.name = "Vui lòng nhập tên";
+		}else{
+			newChangeError.name = ""
+		}
+	
+		if(!values.email ){
+			isValid = false;
+			newChangeError.email = "Vui lòng nhập email";
+		}else if(!validateEmail(values.email)){
+			isValid = false;
+			newChangeError.email = "Email không hợp lệ";
+		}else{
+			newChangeError.email = ""
+		}
+	
+		if(!values.contentComment ){
+			isValid = false;
+			newChangeError.contentComment = "Vui lòng nhập nội dung đánh giá";
+		}else{
+			newChangeError.contentComment = ""
+		}
+		
+		if (isValid) {
+			setErrors({ ...newChangeError })
+			console.log("4569999", values)
+			if(checkProperties(values) === true){ // true
+				console.log("123")
+				setValues({
+					countStar: 0,
+					name: '',
+					email: '',
+					contentComment: ''
+				})
+				addComment({ productId: id, inforComment: values, currentTime: getCurrentTime() });
+				setIsModalVisible(false);
+			}else{
+				console.log("456")
+
+				// setIsModalVisible(false);
+			}
+			
+		} else {
+			setErrors({ ...newChangeError })
+			// setIsModalVisible(false);
+		}
+
+		// if (values.countStar === 0 || values.name === "" || values.email === "" || values.contentComment === "") {
+		// 	// setErrors(validation(values))
+		// } else {
+		// 	// addComment({ productId: id, inforComment: values, currentTime: getCurrentTime() });
+		// 	// setValues({})
+		// 	// setIsModalVisible(false);
+		// }
 	};
 
 	const handleCancel = () => {
-		setErrors({})
 		setIsModalVisible(false);
 	};
 
@@ -258,7 +352,7 @@ function Detail({ productDetail, productListSame, commentList, addToCart, addCom
 				(<div className="wrap-detail">
 					<SkeletonTheme color="#ffffff">
 						<Row gutter={[16, 16]}>
-							<Col md={18}>
+							<Col md={18} >
 								<div className="detail-product">
 									<Row>
 										<Col md={10}>
@@ -313,10 +407,10 @@ function Detail({ productDetail, productListSame, commentList, addToCart, addCom
 				<div className="wrap-detail">
 					<ScrollToTop />
 					<Row gutter={[16, 16]}>
-						<Col md={18}>
+						<Col lg={18} md={24}>
 							<div className="detail-product">
 								<Row>
-									<Col md={10}>
+									<Col lg={10} md={24} sm={24} xs={24}>
 										<div className="detail-product-img">
 											<img id="image" src={imgDef} alt="sản phẩm" />
 										</div>
@@ -325,7 +419,7 @@ function Detail({ productDetail, productListSame, commentList, addToCart, addCom
 											
 										</div>
 									</Col>
-									<Col md={14} xs={24}>
+									<Col lg={14} md={24} sm={24} xs={24}>
 										<div className="detail-product-info">
 											<div className="detail-product-info-top">
 												<Rate disabled allowHalf style={{ fontSize: "12px" }} defaultValue={5} />
@@ -371,7 +465,7 @@ function Detail({ productDetail, productListSame, commentList, addToCart, addCom
 								</Row>
 							</div>
 						</Col>
-						<Col md={6} xs={24}>
+						<Col lg={6} md={24}>
 							<div className="widget">
 								<div>
 									<span><i className="far fa-truck-moving"></i></span>

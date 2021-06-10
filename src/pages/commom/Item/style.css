@@ -68,3 +68,9 @@
 		padding: 0 8px 16px !important;
 	}
 }
+
+@media only screen and (max-width: 321px){
+	.item-cart-product .ant-card-body{
+		padding: 0 4px 16px !important;
+	}
+}

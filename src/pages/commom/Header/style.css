@@ -196,7 +196,7 @@ header{
 
 @media only screen and (max-width: 426px){
 	.container-header{
-		display: none;
+		display: none !important;
 	}
 	.header-mobile{
 		display: block;

@@ -27,29 +27,33 @@ function* loginSaga(action) {
         password,
       }
     });
-    if (result.data.length > 0) {
-    
-      localStorage.setItem('userInfo', JSON.stringify(result.data[0]));
-      
-      if(result.data[0].admin) {
-        yield put({ // đợi rồi mới chạy
-          type: "LOGIN_SUCCESS",
-          payload: {
-            data: result.data[0],
-          },
-        });
-        yield history.push('/admin');
-      } else {
-        yield put({ // đợi rồi mới chạy
-          type: "LOGIN_SUCCESS",
-          payload: {
-            data: result.data[0],
-          },
-        });
-        console.log("prevPath: ", prevPath)
-        yield history.push(prevPath ? prevPath : "/");
+    if (result.data.length > 0 ) {
+      if(result.data[0].status === true){
+        localStorage.setItem('userInfo', JSON.stringify(result.data[0]));
+        if(result.data[0].admin) {
+          yield put({ // đợi rồi mới chạy
+            type: "LOGIN_SUCCESS",
+            payload: {
+              data: result.data[0],
+            },
+          });
+          yield history.push('/admin');
+        } else {
+          yield put({ // đợi rồi mới chạy
+            type: "LOGIN_SUCCESS",
+            payload: {
+              data: result.data[0],
+            },
+          });
+          
+          console.log("prevPath: ", prevPath)
+          yield history.push(prevPath ? prevPath : "/");
+        }
+      }else {
+        openNotificationWithIcon("error", "Tài khoản của bạn đã bị khóa")
       }
     } else {
+      openNotificationWithIcon("error", "Email hoặc mật khẩu không đúng")
       yield put({
         type: "LOGIN_FAIL",
         payload: {
@@ -58,6 +62,7 @@ function* loginSaga(action) {
       });
     }
   } catch (e) {
+   console.log(e)
     yield put({
       type: "LOGIN_FAIL",
       payload: {

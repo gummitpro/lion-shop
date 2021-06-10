@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { BrowserRouter as Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
 // import history from '../../utils/history';
 import './style.css';
@@ -15,7 +15,12 @@ function Register({registerTask}) {
 		password: '',
 		confirmPassword: ''
 	});
-	const [errors, setErrors] = useState({})
+	const [errors, setErrors] = useState({
+		userName: '',
+		email: '',
+		password: '',
+		confirmPassword: ''
+	})
 
 	const handleChange = e => {
 		const {name, value} = e.target
@@ -24,16 +29,73 @@ function Register({registerTask}) {
 			[name]: value
 		})
 	}	
-	
-	const handleSubmit = e => {
-		const{ userName, email, password, confirmPassword} = values;
-		e.preventDefault();
-		setErrors(validation(values))
-	
-		if(userName.length !== 0 && email.length !==0 && password.length!==0 && confirmPassword.length !== 0 && password === confirmPassword){
-			registerTask(values)
+	function checkProperties(obj) {
+		for (var key in obj) {
+			 if (obj[key] !== "")
+				  return false;
 		}
-		
+		return true;
+  }
+	const handleSubmit = e => {
+
+		let isValid = true;
+		const newChangeError = {
+			userName: '',
+			email: '',
+			password: '',
+			confirmPassword: ''
+		}
+
+		if (values.email.length === 0) {
+			isValid = false;
+			newChangeError.email = "Vui lòng nhập mật khẩu cũ !";
+		} else if(!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(values.email)){
+			isValid = false;
+			newChangeError.email = "Email không hợp lệ"
+		}else {
+			newChangeError.email = "";
+		}
+
+
+		if (values.userName.length === 0) {
+			isValid = false;
+			newChangeError.userName = "Vui lòng nhập tên tài khoản !";
+		} else if(values.userName.length > 6){
+			isValid = false;
+			newChangeError.userName = "Tên tài khoản nhiều nhất là 6 ký tự";
+		} else{
+			newChangeError.userName = "";
+		}
+
+		if(values.password.length === 0 ){
+			isValid = false;
+			newChangeError.password = "Vui lòng nhập mật khẩu";
+		}else if(values.password.length < 6){
+			isValid = false;
+			newChangeError.password = "Mật khẩu tối thiểu 6 ký tự";
+		}else{
+			newChangeError.password = "";
+		}
+	
+		if(!values.confirmPassword){
+			isValid = false;
+			newChangeError.confirmPassword = "Vui lòng xác nhận lại mật khẩu";
+		}else if(values.password !== values.confirmPassword){
+			isValid = false;
+			newChangeError.confirmPassword = "Mật khẩu không trùng khớp";
+		}else{
+			newChangeError.confirmPassword = ""
+		}
+
+		if (isValid) {
+			console.log("values input: ", values);
+			setErrors({ ...newChangeError })
+			registerTask(values)
+		} else {
+			setErrors({ ...newChangeError })
+		}
+
+
 	}
 
 	return (
@@ -42,7 +104,7 @@ function Register({registerTask}) {
 			<div className="wrap-register">
 				<div className="content-register">
 					<h1 className="sign-up-heading">Đăng ký</h1>
-					<form className="sign-up-form" onSubmit={handleSubmit}>
+					<form className="sign-up-form">
 						<div className="form-inputs">
 							<label htmlFor="userName" className="sign-up-label">User name</label>
 							<input
@@ -60,7 +122,7 @@ function Register({registerTask}) {
 							<label htmlFor="email" className="sign-up-label">Email</label>
 							<input
 								id="email"
-								type="email"
+								type="text"
 								name="email"
 								className="sign-up-input"
 								placeholder="Nhập email của bạn"
@@ -96,7 +158,7 @@ function Register({registerTask}) {
 							{errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
 						</div>
 						<div className="btn">
-							<button className="sign-up-submit" type="submit">
+							<button className="sign-up-submit" type="button" onClick={() => handleSubmit()}>
 								Đăng ký
 							</button>
 							<p>Bạn đã có tài khoản <Link to ="/dang-nhap">Đăng nhập</Link></p>

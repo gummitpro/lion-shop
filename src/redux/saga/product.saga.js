@@ -1,13 +1,15 @@
 import { put, takeEvery } from 'redux-saga/effects';
 import axios from 'axios';
+import { resolveOnChange } from 'antd/lib/input/Input';
 
+import {URL } from '../../contrains/App'
 
 function* getProductListSaga() {
   try {
     //const { page, limit } = action.payload;
     const result = yield axios({
       method: 'GET',
-      url: 'http://localhost:3001/products'
+      url: URL + '/products?_embed=comments'
     });
     yield put({
       type: "GET_PRODUCT_LIST_SUCCESS",
@@ -30,31 +32,47 @@ function* getProductDetailSaga(action) {
     const { id } = action.payload;
     const result = yield axios({
       method: 'GET',
-      url: `http://localhost:3001/products/${id}`,
+      url: URL + `/products/${id}?_embed=comments`,
       params: {
         _embed: 'productOptions',
         // _expand: 'category'
       }
     });
+    // console.log("result: ", result.status)
+    if(result.status == 200){
+      yield put({
+        type: "GET_PRODUCT_DETAIL_SUCCESS",
+        payload: {
+          data: result.data,
+        },
+      });
+    }else{
+     
+      yield put({
+        type: "GET_PRODUCT_DETAIL_FAIL", 
+        payload: {
+          error: result.status
+        },
+      });
+    }
+    
+  } catch (e) {
+    console.log("Hoang long 12313123l lllll", e)
     yield put({
-      type: "GET_PRODUCT_DETAIL_SUCCESS",
+      type: "GET_PRODUCT_DETAIL_FAIL", 
       payload: {
-        data: result.data,
+        error: 404
       },
     });
-  } catch (e) {
-    yield put({type: "GET_PRODUCT_DETAIL_FAIL", message: e.message});
   }
 }
 
 function* getProductListSameSaga(action) {
   try {
-    
     const { categoryId } = action.payload;
-    console.log("categoryId saga: ", categoryId)
     const result = yield axios({
       method: 'GET',
-      url: `http://localhost:3001/products?categoryId=${categoryId}`
+      url: URL + `/products?categoryId=${categoryId}&_embed=comments`
     });
     // console.log("result list product: ", result)
     yield put({
@@ -73,16 +91,41 @@ function* getProductListSameSaga(action) {
   }
 }
 
-function* addProductAdminSaga(action) {
+function* getProductListSearchSaga(action) {
+  try {
+    const { search } = action.payload;
+    console.log("action.payload: ", action.payload.search)
+    const result = yield axios({
+      method: 'GET',
+      url: URL + `/products?q=${action.payload.search}&_embed=comments`
+    });
+    console.log("result list product search: ", result)
+    yield put({
+      type: "GET_PRODUCT_LIST_SEARCH_SUCCESS",
+      payload: {
+        data: result.data
+      },
+    });
+  } catch (e) {
+    yield put({
+      type: "GET_PRODUCT_LIST_SEARCH_FAIL",
+      payload: {
+        error: e.error
+      },
+    });
+  }
+}
+
+function* addProductSaga(action) {
    try {
-    const { name, price, categoryId, inventory} = action.payload;
-    const pos = yield axios.post('http://localhost:3001/products', {name, price, categoryId, inventory})
-    const result = yield axios.get('http://localhost:3001/products')
-    if (pos.data) {
+    const { price, name } = action.payload;
+    const result = yield axios.post(URL + '/products', {name, price})
+    if (result.data) {
       yield put({ // đợi rồi mới chạy
         type: "ADD_PRODUCT_ADMIN_SUCCESS",
         payload: {
-          data: result.data,
+          // data: result.data[0],
+          // data: result.data,
         },
       });
       // yield alert("Thành công");
@@ -104,10 +147,10 @@ function* addProductAdminSaga(action) {
    }
 }
 
-function* editProductAdminSaga (action) {
+function* editProductSaga (action) {
   try {
-    const {name,price,id,categoryId, inventory} = action.payload
-    const result = yield axios.patch(`http://localhost:3001/products/${id}`, {name,price,categoryId,inventory})
+    const {name,price,id} = action.payload
+    const result = yield axios.post(URL + `/products/${id}`, {name, price})
     if(result.data){
       yield put({
         type: 'EDIT_PRODUCT_ADMIN_SUCCESS',
@@ -130,38 +173,13 @@ function* editProductAdminSaga (action) {
       })
     }
 }
-function* removeProductAdminSaga(action){
-  try {
-    const { id } = action.payload
-    const result = yield axios.delete(`http://localhost:3001/products/${id}`)
-    if(result.data) {
-        yield put({
-          type: 'REMOVE_PRODUCT_ADMIN_SUCCESS',
-          payload: { id }
-    })
-    } else {
-      yield put ({
-        type: 'REMOVE_PRODUCT_ADMIN_FAIL',
-        payload: {
-          error: 'FAIL'
-        }
-      })
-    }
-  } catch (e) {
-    yield put ({
-      type: 'REMOVE_PRODUCT_ADMIN_FAIL',
-      payload: {
-        error: e.error
-      }
-    })
-  }
-}
 
 export default function* productSaga() {
   yield takeEvery('GET_PRODUCT_LIST_REQUEST', getProductListSaga);
   yield takeEvery('GET_PRODUCT_DETAIL_REQUEST', getProductDetailSaga);
   yield takeEvery('GET_PRODUCT_SAME_REQUEST', getProductListSameSaga);
-  yield takeEvery('ADD_PRODUCT_ADMIN_REQUEST', addProductAdminSaga);
-  yield takeEvery('EDIT_PRODUCT_ADMIN_REQUEST', editProductAdminSaga);
-  yield takeEvery('REMOVE_PRODUCT_ADMIN_REQUEST',removeProductAdminSaga);
+  yield takeEvery('GET_PRODUCT_LIST_SEARCH_REQUEST', getProductListSearchSaga);
+  yield takeEvery('ADD_PRODUCT_ADMIN_REQUEST', addProductSaga);
+  yield takeEvery('EDIT_PRODUCT_ADMIN_REQUEST', editProductSaga);
+  // yield takeEvery('GET_PRODUCT_DETAIL_REQUEST', getProductDetailSaga);
 }

@@ -1,0 +1,32 @@
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+.wrap-home{
+	background-color: #f2f3f5;
+}
+.carousel img{
+	width: 100%;
+	height: auto;
+}
+.banner{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	border-radius: 8px;
+	padding: 20px 0;
+}
+.banner img{
+	border-radius: 8px;
+}
+.banner-product{
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	background-color: white;
+	margin: 0 32px;
+	border-radius: 8px;
+	padding: 20px;
+}

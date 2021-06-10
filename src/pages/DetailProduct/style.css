@@ -1,0 +1,145 @@
+.wrap-detail{
+	background-color: #f2f3f5;
+	padding: 20px;
+}
+.detail-product{
+	background-color: white;
+	padding: 20px;
+	border-radius: 8px;
+}
+
+.detail-product-img img{
+	width: 100%;
+	height: 80%;
+}
+.muti-img{
+	display: flex;
+	align-items: center;
+}
+.small-img{
+	cursor: pointer;
+	margin-right: 20px;
+	padding: 10px;
+	border: 1px solid #dfdfdf;
+	border-radius: 4px;
+}
+.small-img img{
+	display: block;
+	width: 40px;
+	height: 40px;
+	margin: auto;
+	border-radius: 4px;
+	margin-top: 3px;
+}
+.detail-product-info div{
+	margin-bottom: 20px;
+}
+.name-product{
+	font-size: 13px;
+	max-height: 3.775rem;
+	min-height: 3.775rem;
+	font-size: 36px;
+	line-height: 1.33;
+	display: unset;
+	word-break: break-word;
+}
+.product-select-item{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	padding: 6px 0;
+	transition: all .3s ease;
+	border-radius: 4px;
+	cursor: pointer;
+	color: #444b52;
+}
+.radio {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+.price-product{
+	font-weight: 500;
+	color: #cb1c22;
+	margin-right: 10px;
+	font-size: 32px;
+	line-height: 40px;
+}
+.mul-price-product{
+	color: #cb1c22;
+	font-weight: 500;
+	margin-bottom: 0;
+}
+.select-price-product{
+	
+	display: flex;
+	margin-bottom: 16px;
+	background: #f8f9fa;
+	border-radius: 4px;
+}
+.btn{
+	width: 100%;
+	padding: 12px 0;
+	border: none;
+}
+.btn-buy{
+	background-image: linear-gradient(to right, rgb(231, 167, 69), rgb(194, 73, 119));
+	color: white;
+  	font-weight: bold;
+}
+.btn-buy:hover{
+	background-image: linear-gradient(to right, rgb(204, 132, 25), rgb(202, 35, 99));
+}
+.btn-cart{
+	background-image: linear-gradient(to right, rgb(231, 167, 69), rgb(194, 73, 119));
+	color: white;
+  	font-weight: bold;
+}
+.btn-cart:hover{
+	background-image: linear-gradient(to right, rgb(204, 132, 25), rgb(202, 35, 99));
+}
+.widget{
+	background-color: white;
+	padding: 20px;
+	border-radius: 8px;
+}
+.widget h3{
+	margin-bottom: 12px !important;
+}
+.widget span .far{
+	color: #255492;
+}
+.widget p{
+	font-size: 13px;
+}
+.widget p{
+	margin-left: 5px;
+	display: inline-block;
+}
+.des-product{
+	background-color: white;
+	border-radius: 8px;
+	margin-top: 20px;
+}
+.same-product{
+	background-color: white;
+	border-radius: 8px;
+	margin-top: 20px;
+}
+.title-content{
+	background-image: linear-gradient(to right, rgb(219, 135, 8), rgb(165, 21, 76));
+	padding: 12px;
+	border-radius: 8px 0px 16px 0px;
+	width: 200px;
+}
+.title-content h3{
+	text-transform: uppercase;
+}
+.same-product-bottom{
+	padding: 20px;
+}

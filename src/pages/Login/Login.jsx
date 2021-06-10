@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { BrowserRouter as  Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 
-// import history from '../../utils/history';
 import './style.css'
 import Header from '../commom/Header';
 import Footer from '../commom/Footer';
@@ -11,13 +10,18 @@ import validation from './validation';
 import { loginAction } from '../../redux/actions';
 
 
-function Login({loginTask, userInfo}) {
+function Login({loginTask, userInfo, location}) {
 	
 	const [values, setValues] = useState({
 		email: '',
 		password: ''
 	});
 	const [errors, setErrors] = useState({})
+
+	if(Object.keys(userInfo.data).length !==0){
+		return  <Redirect to="/" />;
+	}
+
 	const handleChange = e => {
 		const { name, value } = e.target
 		setValues({
@@ -25,12 +29,14 @@ function Login({loginTask, userInfo}) {
 			[name]: value
 		})
 	}
+	
 	const handleSubmit = e => {
 		e.preventDefault();
 		setErrors(validation(values))
 		
 		if(values.email.length !== 0 && values.password.length){	
-			loginTask(values)
+			const newVal = location.state?.prevPath?{...values, prevPath: location.state.prevPath} : values
+			loginTask(newVal)
 		}
 	}
 
@@ -67,13 +73,15 @@ function Login({loginTask, userInfo}) {
 							/>
 							{errors.password && <p className="error">{errors.password}</p>}
 						</div>
-						<div className="btn">
+						<div className="btn-form-sign-in">
 							<p className="error" style={{textAlign:"center"}}>{userInfo.error}</p>
 							<button className="sign-in-submit" type="submit">
 								Đăng nhập
 							</button>
-							
-							<p>Bạn chưa có tài khoản <Link to="/dang-ky">Đăng ký</Link></p>
+							<div style={{display: "flex", justifyContent: "space-between"}}>
+								<p>Bạn chưa có tài khoản <Link to="/dang-ky">Đăng ký</Link></p>
+								<p>Quên mật khẩu</p>
+							</div>
 
 						</div>
 						<div className="sign-in-or"><span></span></div>
@@ -95,7 +103,6 @@ function Login({loginTask, userInfo}) {
 }
 const mapStateToProps = (state) => {
 	const { userInfo } = state.userReducer;
-	// console.log('userInfo: ', userInfo);
 	return {
 		userInfo,
 	}

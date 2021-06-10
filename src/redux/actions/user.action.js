@@ -44,3 +44,16 @@ export function getProductOrderListAction(params) {
       payload: params,
     }
 }
+// ---------------
+
+export function getUserListAction(){
+    return {
+        type: 'GET_USER_LIST_REQUEST'
+    }
+}
+export function editUserAction(params) {
+    return {
+        type: 'EDIT_USER_REQUEST',
+        payload: params
+    }
+}

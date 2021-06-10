@@ -15,6 +15,7 @@ import Admin from './pages/Admin'
 
 import AdminAccount from './pages/Admin/AdminAccount' 
 
+import Payment from './pages/Payment/Index.jsx'
 import PaymentSuccess from './pages/PaymentSuccess/Index.jsx'
 import Search from './pages/Search/Index.jsx'
 import InforPerson from './pages/Profile/IndexProfile.jsx'

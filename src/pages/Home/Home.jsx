@@ -272,9 +272,9 @@ function Home({ getProductList, productList }) {
 
 							<div className="wrap-banner-product">
 								<div className="banner-product" >
-									<h1>Điện thoại</h1>
+									<h1>Laptop và Macbook</h1>
 									<Slider {...settings}>
-										{renderProductCategory(1)}
+										{renderProductCategory(2)}
 									</Slider>
 								</div>
 							</div>
@@ -286,9 +286,9 @@ function Home({ getProductList, productList }) {
 							</div>
 							<div className="wrap-banner-product">
 								<div className="banner-product">
-									<h1>Laptop và Macbook</h1>
+									<h1>Điện thoại</h1>
 									<Slider {...settings}>
-										{renderProductCategory(2)}
+										{renderProductCategory(1)}
 									</Slider>
 								</div>
 							</div>
@@ -336,7 +336,7 @@ function Home({ getProductList, productList }) {
 							<div className="banner-product" >
 								<h1>Link kiện máy tính</h1>
 								<Slider {...settings}>
-									{renderProductCategory(7)}
+									{renderProductCategory(6)}
 								</Slider>
 							</div>
 						</div>

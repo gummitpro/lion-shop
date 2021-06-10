@@ -14,8 +14,6 @@ module.exports = {
               '@table-header-color': '#fff2e8',
               '@menu-highlight-color': '#ff7a45',
               '@menu-item-active-bg': '#ffbb96',
-
-
             },
             javascriptEnabled: true,
           },

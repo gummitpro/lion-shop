@@ -10,6 +10,7 @@ const columns = [
 	{ title: 'Địa chỉ', dataIndex: 'addressCustomer', key: 'addressCustomer', },
 	{ title: 'Thành tiền', dataIndex: 'totalMoney', key: 'totalMoney', },
 	{ title: 'Thời gian đặt hàng', dataIndex: 'timeOrder', key: 'timeOrder', },
+	{ title: 'Tình trạng', dataIndex: 'status', key: 'status', },
 ];
 
 const columnTwo = [
@@ -21,6 +22,7 @@ const columnTwo = [
 
 function HistoryOrder({productOrderList, getProductOrderList}) {
 	const userInfor = JSON.parse(localStorage.getItem('userInfo'));
+	console.log("productOrderList: ", productOrderList.data)
 	useEffect(()=>{
 		if(userInfor && userInfor.id){
 			getProductOrderList(userInfor.id);
@@ -48,7 +50,8 @@ function HistoryOrder({productOrderList, getProductOrderList}) {
 												: itemCart.price.toLocaleString('vi', { style: 'currency', currency: 'VND' })
 							
 						}
-					})
+					}),
+					status: item.status === 1 ? "Chờ hàng" : (item.status === 2 ? "Đang vận chuyển" : "Đã thanh toán")
 				}
 			})
 		}

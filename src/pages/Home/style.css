@@ -149,7 +149,7 @@ html {
 	.header-sub{
 		display: flex;
 		position: sticky;
-		top: 84px;
+		top: 90px;
 		background-image: linear-gradient(90deg, rgb(230, 147, 23), rgb(192, 51, 105));;
 		font-size: 20px;
 		z-index: 1;
@@ -162,5 +162,14 @@ html {
 		box-shadow: none;
 	}
 	
+}
+
+@media only screen and (max-width: 321px){
+	.banner-product{
+		background-color: white;
+		margin: 0 4px;
+		border-radius: 8px;
+		padding: 4px;
+	}
 }
 

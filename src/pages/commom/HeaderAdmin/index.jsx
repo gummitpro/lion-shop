@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Input, Popover, Button } from 'antd';
 import { logoutAction } from '../../../redux/actions'
 import history from '../../../utils/history'
-import './style.css'
+import '../HeaderAdmin/style.css'
 const { Search } = Input;
 
 function Header({ userInfo, logout }) {

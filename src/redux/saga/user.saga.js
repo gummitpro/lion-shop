@@ -3,7 +3,7 @@ import axios from 'axios';
 import history from '../../utils/history';
 import { notification } from 'antd';
 
-import {URL} from '../../contrains/App'
+import {URL} from '../../contrains/App.js'
 
 const openNotificationWithIcon = (type, notify) => {
   notification[type]({
@@ -206,6 +206,29 @@ function* changePasswordSaga(action){
  
 }
 
+
+
+function* getUserListSaga() {
+  try {
+    const result = yield axios.get('http://localhost:3001/users?_embed=orders')
+    yield put({
+      type: 'GET_USER_LIST_SUCCESS',
+      payload: {
+        data: result.data
+      }
+    })
+  } catch(e) {
+    yield put({
+      type: 'GET_USER_LIST_FAIL',
+      payload: {
+        error: e.error
+      }
+    })
+  }
+}
+
+
+
 export default function* userSaga() {
   yield takeEvery('LOGIN_REQUEST', loginSaga);
   yield takeEvery('GET_USER_INFO_REQUEST', getUserInfoSaga);
@@ -213,4 +236,6 @@ export default function* userSaga() {
   yield takeEvery('GET_PRODUCT_ORDER_LIST_REQUEST', getProductOrderListSaga);
   yield takeEvery('CHANGE_INFOR_REQUEST', changeInforSaga);
   yield takeEvery('CHANGE_PASSWORD_REQUEST', changePasswordSaga);
+
+  yield takeEvery('GET_USER_LIST_REQUEST', getUserListSaga);
 }

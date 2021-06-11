@@ -394,13 +394,14 @@ export default function productReducer(state = initialState, action) {
     }
     case 'ADD_COMMENT_SUCCESS': {
       const { data } = action.payload
+      console.log("ADD_COMMENT_SUCCESSL:  ", action.payload)
       const newArr = [...state.commentList.data];
       newArr.push(data);
       return {
         ...state,
         commentList: {
           ...state.commentList,
-          data: newArr,
+          data: [data, ...state.commentList.data ],
           load: false,
         }
       }

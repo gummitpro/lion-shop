@@ -39,7 +39,9 @@ function Header({ userInfo, logout, shoppingCart, numberCart }) {
 
 	const contentUser = (
 		<div className="sub-user">
+			{userInfo.data.admin ? null :
 			<Button onClick={() => history.replace({ pathname: '/thong-tin-ca-nhan' })}>Thông tin cá nhan</Button>
+			}
 			<Button onClick={() => logOut()}>
 				<div>Đăng suất</div>
 			</Button>
@@ -109,6 +111,15 @@ function Header({ userInfo, logout, shoppingCart, numberCart }) {
 								<li title="Cá nhân" className="login-hover">
 									<Popover placement="bottom" content={contentUser} trigger="hover">
 										<Button>
+											{userInfo.data.admin ?
+											<Link to="/admin">
+												<div className="center-icon">
+													<span><i className="far fa-user"></i></span>
+												</div>
+												<div className="scroll ">
+													<span >{userInfo.data.userName}</span>
+												</div>
+											</Link> : 
 											<Link to="/thong-tin-ca-nhan">
 												<div className="center-icon">
 													<span><i className="far fa-user"></i></span>
@@ -117,6 +128,8 @@ function Header({ userInfo, logout, shoppingCart, numberCart }) {
 													<span >{userInfo.data.userName}</span>
 												</div>
 											</Link>
+											}
+											
 										</Button>
 									</Popover>
 								</li>

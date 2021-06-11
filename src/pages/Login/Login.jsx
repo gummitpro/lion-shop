@@ -16,7 +16,10 @@ function Login({loginTask, userInfo, location}) {
 		email: '',
 		password: ''
 	});
-	const [errors, setErrors] = useState({})
+	const [errors, setErrors] = useState({
+		email: '',
+		password: ''
+	})
 
 	if(Object.keys(userInfo.data).length !==0){
 		return  <Redirect to="/" />;
@@ -32,11 +35,40 @@ function Login({loginTask, userInfo, location}) {
 	
 	const handleSubmit = e => {
 		e.preventDefault();
-		setErrors(validation(values))
+		// setErrors(validation(values))
 		
-		if(values.email.length !== 0 && values.password.length){	
+		let isValid = true;
+		const newChangeError = {
+			email: '',
+			password: ''
+		}
+		if(!values.email ){
+			isValid = false;
+			newChangeError.email = "Vui lòng nhập email";
+			
+		}else if(!/.+@.+\.[A-Za-z]+$/.test(values.email)){
+			isValid = false;
+			newChangeError.email = "Email không hợp lệ"
+		
+		}else{
+			newChangeError.email = ""
+		}
+
+		if(!values.password ){
+			isValid = false;
+			newChangeError.password = "Vui lòng nhập mật khẩu";
+		}
+
+		// if(values.email.length !== 0 && values.password.length){	
+		// 	const newVal = location.state?.prevPath?{...values, prevPath: location.state.prevPath} : values
+		// 	loginTask(newVal)
+		// }
+		if (isValid) {
+			setErrors({ ...newChangeError })
 			const newVal = location.state?.prevPath?{...values, prevPath: location.state.prevPath} : values
 			loginTask(newVal)
+		} else {
+			setErrors({ ...newChangeError })
 		}
 	}
 

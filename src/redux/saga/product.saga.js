@@ -57,7 +57,6 @@ function* getProductDetailSaga(action) {
     }
     
   } catch (e) {
-    console.log("Hoang long 12313123l lllll", e)
     yield put({
       type: "GET_PRODUCT_DETAIL_FAIL", 
       payload: {
@@ -97,7 +96,7 @@ function* getProductListSearchSaga(action) {
     console.log("action.payload: ", action.payload.search)
     const result = yield axios({
       method: 'GET',
-      url: URL + `/products?q=${action.payload.search}&_embed=comments`
+      url: URL + '/products?q='+action.payload.search+'&_embed=comments'
     });
     console.log("result list product search: ", result)
     yield put({

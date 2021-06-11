@@ -30,11 +30,12 @@ function Detail({ productDetail, productListSame, commentList, addToCart, addCom
 	const [imgDef, setImgDef] = useState()
 
 	const [tmpSpecifications, setSpecifications] = useState({})
+	const [lc, setLc] = useState(commentList.data)
 
-	const [listComment, setListComment] = useState(commentList.data)
+	
 
 	useEffect(() => {
-
+		console.log("444");
 		setBackgroundChecked({ index: 0, color: "#d6d6e5" })
 		getCommentList({ id: productId })
 		if (productDetail.error !== 404) {
@@ -43,13 +44,18 @@ function Detail({ productDetail, productListSame, commentList, addToCart, addCom
 
 	}, [productId])
 
+	useEffect(()=>{
+		console.log("123");
+		setLc([commentList.data])
+	}, [commentList.data])
+	console.log("lc: ", commentList.data)
+	
 	useEffect(() => {
 		getProductSame({ categoryId: categoryId })
 	}, [categoryId])
 
 	useEffect(() => {
 		if (productDetail.data.id) {
-			setListComment(commentList.data)
 			setOptionSelected(productDetail.data.productOptions[0] || {})
 		}
 		setSpecifications(specifications)
@@ -218,7 +224,9 @@ function Detail({ productDetail, productListSame, commentList, addToCart, addCom
 					email: '',
 					contentComment: ''
 				})
+				
 				addComment({ productId: id, inforComment: values, currentTime: getCurrentTime() });
+				
 				setIsModalVisible(false);
 			}else{
 				console.log("456")

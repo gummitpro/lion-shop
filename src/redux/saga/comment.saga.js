@@ -2,42 +2,9 @@ import { put, takeEvery } from 'redux-saga/effects';
 import axios from 'axios';
 
 import {URL} from '../../contrains/App'
-// function* addProductSaga(action) {
-//    try {
-//     const { price, name } = action.payload;
-//     const result = yield axios.post(URL + ':3001/products', {name, price})
-//     if (result.data) {
-//       yield put({ // đợi rồi mới chạy
-//         type: "ADD_PRODUCT_ADMIN_SUCCESS",
-//         payload: {
-//           // data: result.data[0],
-//           // data: result.data,
-//         },
-//       });
-//       // yield alert("Thành công");
-//     } else {
-//       yield put({
-//         type: "ADD_PRODUCT_ADMIN_FAIL",
-//         payload: {
-//           error: 'FAIL',
-//         },
-//       });
-//     }
-//    } catch (e) {
-//     yield put({
-//       type: "ADD_PRODUCT_ADMIN_FAIL",
-//       payload: {
-//         error: e.error,
-//       },
-//     });
-//    }
-// }
-
 
 function* commentSaga(action) {
 	try {
-		
-	
 	const {productId, inforComment, currentTime} = action.payload;
 	const result = yield axios({
 		method: 'POST',
@@ -56,6 +23,14 @@ function* commentSaga(action) {
 				data: result.data,
 			},
 		});
+		
+		// yield put({
+		// 	type: "GET_COMMENT_LIST_REQUEST",
+		// 	payload: {
+		// 		// data: result.data[0],
+		// 		data: result.data,
+		// 	},
+		// });
 	} else {
 		yield put({
 			type: "ADD_COMMENT_FAIL",
@@ -63,6 +38,7 @@ function* commentSaga(action) {
 				error: 'FAIL',
 			},
 		});
+		
 	}} catch (error) {
 		console.log(error)
 	}
@@ -74,7 +50,7 @@ function* getCommentListSaga(action) {
 		const { id } = action.payload;
 		const result = yield axios({
 		  method: 'GET',
-		  url: URL + '/comments?productId='+id + '&_sort=id&_order=desc'
+		  url: URL + '/comments?productId='+id+ '&_sort=id&_order=desc&_page=1&_limit=5'
 		});
 		yield put({
 		  type: "GET_COMMENT_SUCCESS",
@@ -82,6 +58,7 @@ function* getCommentListSaga(action) {
 			 data: result.data
 		  },
 		});
+		
 	 } catch (e) {
 		yield put({
 		  type: "GET_COMMENT_FAIL",

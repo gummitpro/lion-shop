@@ -163,7 +163,7 @@ function DashBoard() {
                         </Card>
                       </Col>
                     </Row>
-                  </div>,
+                  </div>
 
                 </div>
                 <div className='para'>
@@ -191,7 +191,7 @@ function DashBoard() {
                         </Card>
                       </Col>
                     </Row>
-                  </div>,
+                  </div>
                 </div>
               </div>
             </div>

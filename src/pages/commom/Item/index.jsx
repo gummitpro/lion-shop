@@ -42,7 +42,7 @@ function index(props) {
 							}
 
 						/>
-					</Card>,
+					</Card>
 				</div>
 			</Link>
 

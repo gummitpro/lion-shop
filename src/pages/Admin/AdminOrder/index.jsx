@@ -1,13 +1,13 @@
 import Header from '../../commom/HeaderAdmin';
 import Footer from '../../commom/FooterAdmin';
 import SideBar from '../../commom/SidebarAdmin';
-import { Table, Badge, Row, Col, Space, Select, Button, Modal, Input, message } from 'antd';
-import { getOrderAdminAction, getUserListAction, changeStatusAction, getOrderFilterAdminAction } from '../../../redux/actions'
+import { Table, Badge, Row, Col, Space, Select, Button, Modal, Input, message, Popconfirm } from 'antd';
+import { getOrderAdminAction, getUserListAction, changeStatusAction, getOrderFilterAdminAction, removeOrderAdminAction } from '../../../redux/actions'
 import { connect } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { EditOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
-function AdminOrder({ getOrder, orderList, getUserList, changeStatus, getOrderFilter }) {
+function AdminOrder({ getOrder, orderList, getUserList, changeStatus, getOrderFilter, removeOrder }) {
 
   useEffect(() => {
     getOrder()
@@ -166,12 +166,25 @@ function AdminOrder({ getOrder, orderList, getUserList, changeStatus, getOrderFi
       },
       {
         title: '', key: 'edit',
-        render: (record) => <Button
-          icon={< EditOutlined />}
-          onClick={() => (setIsShowModal(true), setRecord(record))}
-        >
+        render: (record) => 
+        <Space>
+          <Button
+            icon={< EditOutlined />}
+            onClick={() => (setIsShowModal(true), setRecord(record))}
+          >
 
-        </Button>
+          </Button>
+          <Popconfirm
+          title={`Bạn có chắc muốn xóa`}
+          onConfirm={() => (removeOrder({ id: record.id }), message.success("Xoá thành công"))}
+          okText="Xóa"
+          cancelText="Hủy"
+          >
+            <Button icon={<DeleteOutlined/>}
+              >
+            </Button>
+          </Popconfirm>
+        </Space>
       }
     ];
 
@@ -189,8 +202,8 @@ function AdminOrder({ getOrder, orderList, getUserList, changeStatus, getOrderFi
   return (
     <>
       <Header />
-      <div className='user-manager' style={{ width: '100%' }}>
-        <Row className='row' gutter={24} style={{ width: '100%', margin: '10px 0px' }}>
+      <div className='user-manager' style={{ width: '100%', padding: '10px 0px' }}>
+        <Row className='row' gutter={24} style={{ width: '100%', margin: '10px 0px !important' }}>
           <Col span={6}>
             <SideBar />
           </Col>
@@ -229,7 +242,8 @@ const mapDispatchToProps = (dispatch) => {
     getOrder: (params) => dispatch(getOrderAdminAction(params)),
     getOrderFilter: (params) => dispatch(getOrderFilterAdminAction(params)),
     getUserList: (params) => dispatch(getUserListAction(params)),
-    changeStatus: (params) => dispatch(changeStatusAction(params))
+    changeStatus: (params) => dispatch(changeStatusAction(params)),
+    removeOrder: (params) => dispatch(removeOrderAdminAction(params))
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(AdminOrder);

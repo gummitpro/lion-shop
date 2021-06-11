@@ -4,6 +4,8 @@ import Header from '../../commom/HeaderAdmin';
 import Footer from '../../commom/FooterAdmin';
 import SideBar from '../../commom/SidebarAdmin';
 import Specification from './Specification';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import './style.css'
 import {
   Row,
@@ -60,28 +62,29 @@ function ProductListPage({
   const [isShowCreateOption, setIsShowCreateOption] = useState(false);
   const [saveValue, setSaveValue] = useState();
   const [searchKey, setSearchKey] = useState('')
+  const [desData, setDesData] = useState('')
 
   const [productForm] = Form.useForm();
   const [categoryForm] = Form.useForm();
 
   console.log("🚀 ~ file: index.jsx ~ line 68 ~ productSelected", productSelected)
   const imageArr = productSelected.id
-  ? productSelected.image.split() : null
+    ? productSelected.image.split() : null
   console.log("🚀 ~ file: index.jsx ~ line 69 ~ imageArr", imageArr)
   const formImages = productSelected.id
-  ? imageArr.map((image, index) => ({
-    uid: index,
-    name: `image-${index + 1}.jpg`,
-    thumbUrl: image,
-  }))
-  : []
+    ? imageArr.map((image, index) => ({
+      uid: index,
+      name: `image-${index + 1}.jpg`,
+      thumbUrl: image,
+    }))
+    : []
 
-const initialValues = productSelected.id
-  ? {
-    ...productSelected,
-    image: formImages,
-  }
-  : {}
+  const initialValues = productSelected.id
+    ? {
+      ...productSelected,
+      image: formImages,
+    }
+    : {}
 
   useEffect(() => {
     getProductListAdmin();
@@ -105,6 +108,11 @@ const initialValues = productSelected.id
   }, [productSelected.id])
 
 
+  const handleDes = (e, editor) => {
+    const data = editor.getData()
+    setDesData(data)
+  }
+
   function handleEditProduct(record) {
     setIsShowModify(true);
     setProductSelect(record);
@@ -119,12 +127,13 @@ const initialValues = productSelected.id
     const values = productForm.getFieldsValue();
     const specify = categoryForm.getFieldValue();
     const newImages = values.image ? values.image.map((file) => file.thumbUrl).toString() : ""
-    
+
     const newValue = {
       ...values,
+      des: desData,
       image: newImages,
     }
-    
+    console.log("🚀 ~ file: index.jsx ~ line 132 ~ handleSubmitForm ~ newValue", newValue)
     if (productSelected.id) {
       editProductAdmin({ id: productSelected.id, ...newValue, specifications: specify });
     } else {
@@ -190,7 +199,7 @@ const initialValues = productSelected.id
   ];
 
   const tableData = filterProductList.map((productItem) => {
-  console.log("🚀 ~ file: index.jsx ~ line 193 ~ tableData ~ productItem", productItem.category)
+    console.log("🚀 ~ file: index.jsx ~ line 193 ~ tableData ~ productItem", productItem.category)
     let minValue = 0;
     let maxValue = 0;
     productItem.productOptions.forEach((option) => {
@@ -314,8 +323,8 @@ const initialValues = productSelected.id
   return (
     <>
       <Header />
-      <div className='product-manager'>
-        <Row className='row' gutter={24} style={{ width: '100%', margin: '10px 0px' }}>
+      <div className='product-manager' style={{ padding: '10px 0px' }}>
+        <Row className='row' gutter={24} style={{ width: '100%' }}>
           <Col span={6}>
             <SideBar />
           </Col>
@@ -351,7 +360,6 @@ const initialValues = productSelected.id
                     }
                   })
                   const columns = [
-                    { title: 'Thông tin', dataIndex: 'title', key: 'info' },
                     { title: 'Thêm', dataIndex: 'memory', key: 'memory' },
                     {
                       title: 'Giá thêm', dataIndex: 'price', key: 'price',
@@ -367,17 +375,17 @@ const initialValues = productSelected.id
               title={productSelected.id ? "Chỉnh sửa sản phẩm" : "Thêm sản phẩm"}
               width={500}
               visible={isShowModify}
-              onCancel={() => (setIsShowModify(false), setSaveValue())}
+              onCancel={() => (setIsShowModify(false), setSaveValue(), setDesData(''))}
               footer={(
                 <Row justify="end">
                   <Space>
-                    <Button onClick={() => (setIsShowModify(false), setSaveValue())}>Hủy</Button>
+                    <Button onClick={() => (setIsShowModify(false), setSaveValue(), setDesData(''))}>Hủy</Button>
                     <Button type="primary"
-                    onClick={() => productForm.validateFields().then(() => {
-                      handleSubmitForm()
-                    }) .catch(info => {
-                      console.log('Validate Failed:', info);
-                    })}
+                      onClick={() => productForm.validateFields().then(() => {
+                        handleSubmitForm()
+                      }).catch(info => {
+                        console.log('Validate Failed:', info);
+                      })}
                     >Lưu</Button>
                   </Space>
                 </Row>
@@ -389,7 +397,7 @@ const initialValues = productSelected.id
                 name="productForm"
                 initialValues={initialValues}
               >
-                <Form.Item name="name" label="Tên sản phẩm" rules={[{required: true, message:'Xin mời nhập tên sản phẩm'}]}>
+                <Form.Item name="name" label="Tên sản phẩm" rules={[{ required: true, message: 'Xin mời nhập tên sản phẩm' }]}>
                   <Input placeholder="Tên sản phẩm" />
                 </Form.Item>
                 <Form.Item
@@ -420,31 +428,30 @@ const initialValues = productSelected.id
                     <Button icon={<UploadOutlined />}>Click to upload</Button>
                   </Upload>
                 </Form.Item>
-
-                <Form.Item name="categoryId" label="Loại sản phẩm" rules={[{required: true, message:'Xin mời chọn loại sản phẩm'}]}>
+                
+                <Form.Item name="categoryId" label="Loại sản phẩm" rules={[{ required: true, message: 'Xin mời chọn loại sản phẩm' }]}>
                   <Select placeholder="Loại sản phẩm" onChange={(value) => setSaveValue(value)}>
                     {renderCategoryOptions()}
                   </Select>
                 </Form.Item>
-                <Form.Item name="price" label="Giá gốc" rules={[{required: true, message:'Xin mời nhập giá gốc sản phẩm'}]}>
+                <Form.Item name="price" label="Giá gốc" rules={[{ required: true, message: 'Xin mời nhập giá gốc sản phẩm' }]}>
                   <InputNumber
                     formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                     placeholder="Giá gốc"
                     style={{ width: '100%' }}
                   />
                 </Form.Item>
-                <Form.Item name="inventory" label="Kho" rules={[{required: true, message:'Xin mời nhập số lượng sản phẩm'}]}>
+                <Form.Item name="inventory" label="Kho" rules={[{ required: true, message: 'Xin mời nhập số lượng sản phẩm' }]}>
                   <InputNumber
-                    placeholder="Kho"
+                    placeholder="Số lượng kho"
                     style={{ width: '100%' }}
                   />
                 </Form.Item>
-                <Form.Item
-                  label="Mô tả"
-                  name="des"
-                >
-                  <Input.TextArea />
+                <Form.Item label="Mô tả">
+
+                  <CKEditor editor={ClassicEditor} data={productSelected.id ? initialValues.des : ""} onChange={handleDes} />
                 </Form.Item>
+                
                 <Form
                   form={categoryForm}
                   layout="vertical"

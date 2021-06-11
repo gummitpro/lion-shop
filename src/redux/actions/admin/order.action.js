@@ -16,3 +16,9 @@ export function getOrderFilterAdminAction(params) {
     payload: params,
   }
 }
+export function removeOrderAdminAction(params) {
+  return {
+    type: 'REMOVE_ORDER_ADMIN_REQUEST',
+    payload: params,
+  }
+}

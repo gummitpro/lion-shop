@@ -56,8 +56,8 @@ function* getUserFilterSaga(action) {
 }
 function* changeStatusUserAdminSaga (action) {
   try {
-    const { id, status } = action.payload
-    const result = yield axios.patch(URL + `/users/${id}`,{ status })
+    const { id, status, admin } = action.payload
+    const result = yield axios.patch(URL + `/users/${id}`,{ status, admin })
     if (result.data) {
       yield put({
         type: 'CHANGE_STATUS_USER_SUCCESS',

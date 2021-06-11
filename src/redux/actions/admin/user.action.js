@@ -17,6 +17,7 @@ export function removeUserAction(params) {
   }
 }
 export function changeStatusUserAdminAction(params) {
+console.log("🚀 ~ file: user.action.js ~ line 20 ~ changeStatusUserAdminAction ~ params", params)
 
   return {
       type: 'CHANGE_STATUS_USER_REQUEST',

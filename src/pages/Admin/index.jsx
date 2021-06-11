@@ -110,8 +110,8 @@ function DashBoard() {
   return (
     <>
       <Header />
-      <div className='dash-manager' style={{ width: '100%' }}>
-        <Row className='row' gutter={24} style={{ width: '100%', margin: '10px 0px' }}>
+      <div className='dash-manager' style={{ width: '100%', padding: '10px 0px'  }}>
+        <Row className='row' gutter={24} style={{ width: '100%'}}>
           <Col span={6}>
             <SideBar />
           </Col>

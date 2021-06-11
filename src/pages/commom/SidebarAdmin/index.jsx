@@ -21,7 +21,7 @@ function SideBar() {
         width: '100%',
         minHeight: '100%',
         borderRadius: '8px',
-        fontSize: '18px'
+        fontSize: '18px',
       }}
       onSelect={(key) => setChoose(key)}
       defaultSelectedKeys={['1']}

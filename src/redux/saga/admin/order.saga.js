@@ -82,9 +82,29 @@ function* getOrderFilterSaga(action) {
     })
   }
 }
-
+function* removeOrderSaga(action) {
+  try {
+    const {id} = action.payload
+    const result = yield axios.delete(URL + `/orders/${id}`)
+    if(result.data) {
+      yield put ({
+        type: 'REMOVE_ORDER_SUCCESS'
+      })
+      yield put ({ type: 'GET_ORDER_ADMIN_REQUEST'})
+    } else {
+      yield put({
+        type: 'REMOVE_ORDER_FAIL',
+      })
+    }
+  } catch (e) {
+    yield put ({
+      type: 'REMOVE_ORDER_FAIL',
+    })
+  }
+}
 export default function* orderAdminSaga() {
   yield takeEvery('CHANGE_STATUS_REQUEST', changeStatusSaga);
   yield takeEvery('GET_ORDER_ADMIN_REQUEST',getOrderSaga);
   yield takeEvery('GET_ORDER_ADMIN_FILTER_REQUEST',getOrderFilterSaga);
+  yield takeEvery('REMOVE_ORDER_ADMIN_REQUEST',removeOrderSaga)
 }

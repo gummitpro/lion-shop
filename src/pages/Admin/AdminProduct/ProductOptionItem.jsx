@@ -44,7 +44,7 @@ function ProductOptionItem({
             setIsEditForm(false);
           }}
         >
-          <Form.Item name="title" label="Tùy chọn">
+          <Form.Item name="memory" label="Tùy chọn">
             <Input placeholder="Tùy chọn" />
           </Form.Item>
           <Form.Item name="price" label="Giá thêm">
@@ -69,7 +69,7 @@ function ProductOptionItem({
     <Card size="small" style={{ marginBottom: 8 }}>
       <Row justify="space-between">
         <Space>
-          <div>{optionItem.title}</div>
+          <div>{optionItem.memory}</div>
           <div>{optionItem.price.toLocaleString()}</div>
         </Space>
         <Space>

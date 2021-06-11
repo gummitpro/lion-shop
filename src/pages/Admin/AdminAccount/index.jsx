@@ -28,8 +28,8 @@ function AdminAccount({ editUser }) {
   return (
     <>
       <Header />
-      <div className='user-manager' style={{ width: '100%' }}>
-        <Row className='row' gutter={24} style={{ width: '100%', margin: '10px 0px' }}>
+      <div className='user-manager' style={{ width: '100%', padding: '10px 0px' }}>
+        <Row gutter={24} style={{ width: '100%'}}>
           <Col span={6}>
             <SideBar />
           </Col>
@@ -79,9 +79,12 @@ function AdminAccount({ editUser }) {
                       <Form.Item label='Email' name='email' rules={[
                         {
                           required: true,
-                          message: 'Hãy nhập thông tin',
+                          pattern: new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g),
+                          message: "Sai định dạng!"
                         }]}>
-                        <Input disabled={isDis} />
+                        <Input
+                          
+                          disabled={isDis} />
                       </Form.Item>
                       <Form.Item label="Ngày sinh" name='date'>
                         <DatePicker disabled={isDis} format="DD/MM/YYYY" />
@@ -103,7 +106,14 @@ function AdminAccount({ editUser }) {
                       }
                     </div>
                     <div className='info'>
-                      <Form.Item label='Số điện thoại' name='phone' >
+                      <Form.Item
+                       rules={[
+                        {
+                          pattern: new RegExp(/(84|0[3|5|7|8|9])+([0-9]{8})\b/g),
+                          message: "Sai định dạng!"
+                        }
+                      ]} 
+                      label='Số điện thoại' name='phone' >
                         <Input disabled={isDis} />
                       </Form.Item>
                       <Form.Item label="Giới tính" name='gender'>
@@ -118,7 +128,9 @@ function AdminAccount({ editUser }) {
                           rules={[
                             {
                               required: changePass,
-                              message: 'Hãy nhập mật khẩu mới',
+                              pattern: new RegExp(/^(?=.*?[0-9]).{6,}$/g),
+                              message: 'Mật khẩu ít nhất 6 ký tự',
+                              
                             }]}
                         >
                           <Input.Password hidden={isHidden} onChange={() => setChangePass(true)}/>
@@ -131,7 +143,8 @@ function AdminAccount({ editUser }) {
                             rules={[
                               {
                                 required: changePass,
-                                message: 'Hãy nhập xác nhận mật khẩu mật khẩu mới',
+                                message: 'Hãy xác nhận mật khẩu mới',
+                                
                               },
                               ({ getFieldValue }) => ({
                                 validator(_, value) {

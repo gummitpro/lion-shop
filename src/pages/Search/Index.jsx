@@ -19,6 +19,34 @@ function Index({ productListSearch, searchAction }) {
 
 	const [productListSearchs, setProductListSearchs] = useState(productListSearch.data)
 	
+	const arrNumberPage = [];
+
+	// ----------------------
+	
+	// const [post, setPost] = useState([]);
+	// const [currentPage, setCurrentPage] = useState(1)
+	// const [postPerPage, setPostPerPage] = useState(10)
+	// setPost(productListSearch.data)
+
+	// console.log("arrNumberPage: ", post);
+	// ----------------------
+	for(let i = 1;i<=Math.ceil(productListSearch.data.length/20);i++){
+		arrNumberPage.push(i)
+	}
+	const [ttt, setTTT] = useState(productListSearchs)
+	console.log("ttt", productListSearchs)
+	const currentListSearch = productListSearchs.slice(1 * 2 - 2, 20)
+	console.log("currentListSearch: ", currentListSearch) 
+
+	
+	function renderNumber(){
+		return arrNumberPage.map((item, index) => {
+			return (
+				<a>{item}</a>
+			)
+		})
+	}
+
 	const marks = {
 		// 0: 0,
 		// 100000000: {
@@ -53,14 +81,12 @@ function Index({ productListSearch, searchAction }) {
 
 	const [priceSort, setPriceSort] = useState({beginValue: 0, endValue: 50000000})
 
-	
-
-	console.log("priceSort: ", priceSort)
+	// console.log("priceSort: ", priceSort)
 
 	function sortPrice() {
 		const dataToSort = productListSearch.data;
 		return dataToSort.filter( (item) => {
-			console.log("item: ", item.price, item.price === priceSort.beginValue)
+			// console.log("item: ", item.price, item.price === priceSort.beginValue)
 			return (item.price >= priceSort.beginValue && item.price <= priceSort.endValue) ;
 	  	});
 	}
@@ -123,7 +149,7 @@ function Index({ productListSearch, searchAction }) {
 									<Slider
 										range
 										marks={marks}
-										step={1000000}
+										step={500000}
 										max={100000000}
 										defaultValue={[0, 50000000]}
 										onChange={onChange}
@@ -144,7 +170,11 @@ function Index({ productListSearch, searchAction }) {
 							<div className="search-product">
 							<Row gutter={[16, 16]}>
 								{renderProductList()}
+								
 							</Row>
+								<div className="container-page">
+									{renderNumber()}
+								</div>
 							</div>
 						</Col>
 					)}

@@ -6,7 +6,7 @@ import './style.css'
 import { getUserListAction, removeUserAction, getUserFilterAdminAction, changeStatusUserAdminAction } from '../../../redux/actions'
 import { connect } from 'react-redux'
 import { useEffect, useState } from 'react'
-import { Table, Row, Col, Button, Input, Popconfirm, Badge, Space, Select, Form, Popover } from 'antd';
+import { Table, Row, Col, Button, Input, Popconfirm, Badge, Space, Select, Form, Popover, message } from 'antd';
 import { DeleteOutlined, DisconnectOutlined } from '@ant-design/icons';
 
 
@@ -20,6 +20,7 @@ function AdminUser({ userList, getUserList, removeUser, getUserFilter, changeUse
 
   const [isEdit, setIsEdit] = useState()
   const [searchKey, setSearchKey] = useState('')
+  
 
 
   const onSearch = value => setSearchKey(value)
@@ -40,6 +41,7 @@ function AdminUser({ userList, getUserList, removeUser, getUserFilter, changeUse
   function handleChange(values) {
 
     changeUser({ id: isEdit.id, status: values.status, admin: values.admin })
+    message.success("Thay đổi thành công")
   }
 
   function handleRemove(id) {
@@ -79,7 +81,7 @@ function AdminUser({ userList, getUserList, removeUser, getUserFilter, changeUse
             <Popover placement="left"
               content={
                 <Form layout="vertical" style={{ width: '150px' }}
-                  initialValues={{ status: record.status, admin: record.status }}
+                  initialValues={{ status: record.status, admin: record.admin }}
                   onFinish={(values) => handleChange(values)}
                 >
                   <Form.Item name="id" hidden></Form.Item>
@@ -177,8 +179,8 @@ function AdminUser({ userList, getUserList, removeUser, getUserFilter, changeUse
             <div className='action-bar'>
               <div>Lọc theo:
                 <Select placeholder="Trạng thái" allowClear onChange={(value) => getUserFilter({ status: value })}>
-                  <Select.Option value={"active"}>Đang sử dụng</Select.Option>
-                  <Select.Option value={"disable"}>Tạm khoá</Select.Option>
+                  <Select.Option value={true}>Đang sử dụng</Select.Option>
+                  <Select.Option value={false}>Tạm khoá</Select.Option>
                 </Select>
               </div>
               <Search placeholder="Tìm kiếm ..." allowClear onSearch={onSearch} style={{ width: 200 }} />

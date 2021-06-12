@@ -29,6 +29,28 @@ function* getProductListAdminSaga(action) {
   }
 }
 
+function* getInventoryAdminSaga(action) {
+  try {
+    const result = yield axios({
+      method: 'GET',
+      url: URL + `/products?inventory=0`,
+     
+    });
+    yield put({
+      type: "ADMIN/GET_INVENTORY_SUCCESS",
+      payload: {
+        data: result.data,
+      },
+    });
+  } catch (e) {
+    yield put({
+      type: "ADMIN/GET_INVENTORY_FAIL",
+      payload: {
+        error: e.error
+      },
+    });
+  }
+}
 function* getProductFilterAdminSaga(action) {
   try {
     const {categoryId} = action.payload
@@ -170,13 +192,13 @@ function* deleteProductAdminSaga(action) {
 
 function* createOptionAdminSaga(action) {
   try {
-    const { productId, title, price } = action.payload;
+    const { productId, memory, price } = action.payload;
     const result = yield axios({
       method: 'POST',
       url: URL + '/productOptions',
       data: {
         productId,
-        title,
+        memory,
         price,
       }
     });
@@ -199,13 +221,13 @@ function* createOptionAdminSaga(action) {
 
 function* editOptionAdminSaga(action) {
   try {
-    const { id, productId, title, price } = action.payload;
+    const { id, productId, memory, price } = action.payload;
     const result = yield axios({
       method: 'PATCH',
       url: URL + `/productOptions/${id}`,
       data: {
         productId,
-        title,
+        memory,
         price,
       }
     });
@@ -252,6 +274,7 @@ function* deleteOptionAdminSaga(action) {
 
 export default function* adminProductSaga() {
   yield takeEvery('ADMIN/GET_PRODUCT_LIST_REQUEST', getProductListAdminSaga);
+  yield takeEvery('ADMIN/GET_INVENTORY_REQUEST', getInventoryAdminSaga);
   yield takeEvery('ADMIN/GET_PRODUCT_FILTER_REQUEST', getProductFilterAdminSaga);
   yield takeEvery('ADMIN/GET_CATEGORY_LIST_REQUEST', getCategoryListAdminSaga);
   yield takeEvery('ADMIN/CREATE_PRODUCT_REQUEST', createProductAdminSaga);

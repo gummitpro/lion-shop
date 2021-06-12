@@ -41,6 +41,7 @@ import {
   deleteProductAdminAction,
   createOptionAdminAction,
   setProductSelectAction,
+  getInventoryAdminAction,
 } from '../../../redux/actions'
 
 function ProductListPage({
@@ -55,6 +56,8 @@ function ProductListPage({
   createOptionAdmin,
   setProductSelect,
   productSelected,
+  getInventory,
+  inventoryList
 }) {
 
   const [isShowModify, setIsShowModify] = useState(false);
@@ -63,6 +66,7 @@ function ProductListPage({
   const [saveValue, setSaveValue] = useState();
   const [searchKey, setSearchKey] = useState('')
   const [desData, setDesData] = useState('')
+  const [isShowModal, setIsShowModal] = useState(true);
 
   const [productForm] = Form.useForm();
   const [categoryForm] = Form.useForm();
@@ -89,6 +93,7 @@ function ProductListPage({
   useEffect(() => {
     getProductListAdmin();
     getCategoryListAdmin();
+    getInventory()
   }, []);
 
   useEffect(() => {
@@ -96,6 +101,7 @@ function ProductListPage({
       setIsShowCreateOption(false)
     }
   }, [isShowModify]);
+
 
   useEffect(() => {
     productForm.resetFields();
@@ -116,11 +122,46 @@ function ProductListPage({
   function handleEditProduct(record) {
     setIsShowModify(true);
     setProductSelect(record);
+
   }
 
   function handleCreateProduct() {
     setIsShowModify(true);
     setProductSelect({});
+  }
+
+  function modalInventory() {
+    return(
+
+    <Modal
+        title="Sản phẩm hiện đang hết hàng"
+        centered
+        visible={inventoryList.data.length === 0 ? false : isShowModal}
+        onOk={() => (setIsShowModal(false))}
+        onCancel={() => setIsShowModal(false)}
+        width={600}
+    >
+        {inventoryList.data.map((item) => {
+          return <Row style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems:'center' }}>
+            <Col span={4}>
+              <img src={item.image} alt="img-g" height='80px' width='auto' />
+            </Col>
+            <Col span={10}>
+              <div>{item.name}</div>
+            </Col>
+            <Col span={6}>
+              <Space direction='vertical'>
+                {`Số lượng: ${item.inventory}`}
+              </Space>
+            </Col>
+            <Col span={4}>
+              <Button onClick={() => (setIsShowModify(true),setProductSelect(item))}>Bổ sung</Button>
+            </Col>
+          </Row>
+        }
+        )}
+    </Modal>
+    )
   }
 
   function handleSubmitForm() {
@@ -139,7 +180,8 @@ function ProductListPage({
     } else {
       createProductAdmin({ ...newValue, specifications: specify })
     }
-    setIsShowModify(false);
+    setIsShowModify(false)
+    setIsShowModal(false)
   }
 
   const { Search } = Input;
@@ -199,7 +241,6 @@ function ProductListPage({
   ];
 
   const tableData = filterProductList.map((productItem) => {
-    console.log("🚀 ~ file: index.jsx ~ line 193 ~ tableData ~ productItem", productItem.category)
     let minValue = 0;
     let maxValue = 0;
     productItem.productOptions.forEach((option) => {
@@ -254,7 +295,7 @@ function ProductListPage({
           }}
         >
           <Form.Item
-            name="title"
+            name="memory"
             label="Tùy chọn"
             rules={[{ required: true, message: 'Bạn chưa điền tên của tùy chọn' }]}
           >
@@ -411,14 +452,14 @@ function ProductListPage({
                   validateFirst
                   rules={[
                     { required: true, message: "Xin hãy thêm ảnh sản phẩm" },
-                    () => ({
-                      validator(_, value) {
-                        if (!['image/png', 'image/jpeg', 'image/webp'].includes(value[0].type)) {
-                          return Promise.reject('File không đúng định dạng');
-                        }
-                        return Promise.resolve();
-                      }
-                    })
+                    // () => ({
+                    //   validator(_, value) {
+                    //     if (!['image/png', 'image/jpeg','image/jpg', 'image/webp'].includes(value.type)) {
+                    //       return Promise.reject('File không đúng định dạng');
+                    //     }
+                    //     return Promise.resolve();
+                    //   }
+                    // })
                   ]}
                 >
                   <Upload
@@ -471,6 +512,9 @@ function ProductListPage({
             </Modal>
           </Col>
         </Row>
+          <div>
+            {modalInventory()}
+          </div>
       </div>
       <Footer />
     </>
@@ -478,12 +522,13 @@ function ProductListPage({
 }
 
 const mapStateToProps = (state) => {
-  const { productList, categoryList } = state.adminProductReducer;
+  const { productList, categoryList, inventoryList } = state.adminProductReducer;
   const { productSelected } = state.adminCommonReducer;
   return {
     productList,
     categoryList,
     productSelected,
+    inventoryList,
   }
 };
 
@@ -497,6 +542,7 @@ const mapDispatchToProps = (dispatch) => {
     deleteProductAdmin: (params) => dispatch(deleteProductAdminAction(params)),
     createOptionAdmin: (params) => dispatch(createOptionAdminAction(params)),
     setProductSelect: (params) => dispatch(setProductSelectAction(params)),
+    getInventory: (params) => dispatch(getInventoryAdminAction(params))
   };
 }
 

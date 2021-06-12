@@ -52,9 +52,9 @@ function AdminOrder({ getOrder, orderList, getUserList, changeStatus, getOrderFi
                     <h3>Tài khoản thanh toán:</h3>
                     <div>{`Tài khoản: ${isRecord.user.email}`}</div>
                     <div>{`Tên: ${isRecord.user.userName}`}</div>
-                    <div>{`Giới tính: ${isRecord.user.gender}`}</div>
-                    <div>{`Điện thoại: ${isRecord.user.phone}`}</div>
-                    <div>{`Ngày sinh: ${isRecord.user.date}`}</div>
+                    <div>{`Giới tính: ${isRecord.user.gender ? isRecord.user.gender : ""}`}</div>
+                    <div>{`Điện thoại: ${isRecord.user.phone ? isRecord.user.phone : ""}`}</div>
+                    <div>{`Ngày sinh: ${isRecord.user.date ? isRecord.user.date : ""}`}</div>
                     <div>{`Thời gian mua: ${isRecord.currentTime}`}</div>
                   </Space>
                 </div>

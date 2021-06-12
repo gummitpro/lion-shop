@@ -1,18 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
-  Row,
-  Col,
-  Table,
-  Button,
-  Space,
-  Modal,
   Form,
   Input,
-  Select,
-  Popconfirm,
-  InputNumber,
-  Checkbox,
-  Card,
 } from 'antd';
 
 function Specification({ saveValue }) {

@@ -9,6 +9,11 @@ const initialState = {
     load: false,
     error: '',
   },
+  inventoryList: {
+    data: [],
+    load: false,
+    error:'',
+  }
 };
 
 export default function adminProductReducer(state = initialState, action) {
@@ -44,7 +49,37 @@ export default function adminProductReducer(state = initialState, action) {
         },
       }
     }
-
+    case 'ADMIN/GET_INVENTORY_REQUEST': {
+      return {
+        ...state,
+        inventoryList: {
+          ...state.inventoryList,
+          load: true,
+        },
+      }
+    }
+    case 'ADMIN/GET_INVENTORY_SUCCESS': {
+      const { data } = action.payload;
+      return {
+        ...state,
+        inventoryList: {
+          ...state.inventoryList,
+          data: data,
+          load: false,
+        },
+      }
+    }
+    case 'ADMIN/GET_INVENTORY_FAIL': {
+      const { error } = action.payload;
+      return {
+        ...state,
+        inventoryList: {
+          ...state.inventoryList,
+          load: false,
+          error: error,
+        },
+      }
+    }
     case 'ADMIN/GET_PRODUCT_FILTER_REQUEST': {
       return {
         ...state,

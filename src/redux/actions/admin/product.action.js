@@ -61,4 +61,12 @@ export function deleteOptionAdminAction(params) {
     type: 'ADMIN/DELETE_OPTION_REQUEST',
     payload: params,
   }
+  
+}
+export function getInventoryAdminAction(params) {
+  return {
+    type: 'ADMIN/GET_INVENTORY_REQUEST',
+    payload: params,
+  }
+  
 }

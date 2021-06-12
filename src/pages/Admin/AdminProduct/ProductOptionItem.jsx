@@ -77,7 +77,7 @@ function ProductOptionItem({
             <EditOutlined />
           </Button>
           <Popconfirm
-            title={`Bạn có chắc muốn xóa ${optionItem.title}`}
+            title={`Bạn có chắc muốn xóa}`}
             onConfirm={() => deleteOptionAdmin({ id: optionItem.id })}
             okText="Xóa"
             cancelText="Hủy"

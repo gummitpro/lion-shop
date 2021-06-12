@@ -413,7 +413,7 @@ function ProductListPage({
                     { required: true, message: "Xin hãy thêm ảnh sản phẩm" },
                     () => ({
                       validator(_, value) {
-                        if (!['image/png', 'image/jpeg'].includes(value[0].type)) {
+                        if (!['image/png', 'image/jpeg', 'image/webp'].includes(value[0].type)) {
                           return Promise.reject('File không đúng định dạng');
                         }
                         return Promise.resolve();

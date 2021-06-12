@@ -110,6 +110,7 @@ export default function userReducer(state = initialState, action) {
       case 'REGISTER_SUCCESS':
          {
             const { data } = action.payload;
+            // openNotificationWithIconInfor("success", "Đăng ký tài khoản thành công")
             return ;
          }
       case 'REGISTER_FAIL':

@@ -30,25 +30,59 @@ function Detail({ productDetail, productListSame, commentList, addToCart, addCom
 	const [imgDef, setImgDef] = useState()
 
 	const [tmpSpecifications, setSpecifications] = useState({})
-	const [lc, setLc] = useState(commentList.data)
 
-	
+	const [tmpListComment, setTmpListComment] = useState(commentList.data)
+	useEffect(()=>{
+		setTmpListComment(renderListCommentByPage(1))
+		console.log("12313123")
+	}, [commentList])
 
 	useEffect(() => {
 		console.log("444");
 		setBackgroundChecked({ index: 0, color: "#d6d6e5" })
 		getCommentList({ id: productId })
+		setTmpListComment(commentList.data)
 		if (productDetail.error !== 404) {
 			getProductDetail({ id: productId });
 		}
-
 	}, [productId])
+	
+	const arrNumberComment = [];
+	const ll = tmpListComment[0];
+	console.log("aaa: ", commentList)
+	if(commentList.data.length > 0 ){
+		console.log("tmpListComment: ",ll?.id)
+		for(let i = 1;i<=Math.ceil(commentList.data.length/5);i++){
+			arrNumberComment.push(i)
+		}
+	}
 
-	useEffect(()=>{
-		console.log("123");
-		setLc([commentList.data])
-	}, [commentList.data])
-	console.log("lc: ", commentList.data)
+	function renderListCommentByPage(page){
+		const newArr = [...commentList.data]
+		// console.log("ttt", productListSearch.data)
+		const currentListComment = newArr.slice(5 * (page - 1), 5 * page)//  limit * (currenpge - 1) + 1
+		// console.log("currentListComment: ", currentListComment) 
+		return currentListComment
+	}
+
+	function renderNumberPage(){
+		
+		return arrNumberComment.map((item, index) => {
+			return (
+				<a 
+				onClick={()=>{
+					clickPageComment(item)
+				}} key={index}>{item}</a>
+			)
+		})
+	}
+	function clickPageComment(page){
+		console.log("page:111111111111111 ", page)
+		setTmpListComment(renderListCommentByPage(page))
+		// setProductListSearchs(renderListByPage(page))
+	}
+	
+	// console.log("lc: ", commentList.data)
 	
 	useEffect(() => {
 		getProductSame({ categoryId: categoryId })
@@ -239,13 +273,6 @@ function Detail({ productDetail, productListSame, commentList, addToCart, addCom
 			// setIsModalVisible(false);
 		}
 
-		// if (values.countStar === 0 || values.name === "" || values.email === "" || values.contentComment === "") {
-		// 	// setErrors(validation(values))
-		// } else {
-		// 	// addComment({ productId: id, inforComment: values, currentTime: getCurrentTime() });
-		// 	// setValues({})
-		// 	// setIsModalVisible(false);
-		// }
 	};
 
 	const handleCancel = () => {
@@ -333,7 +360,7 @@ function Detail({ productDetail, productListSame, commentList, addToCart, addCom
 	// console.log("sumComment : ", sumComment)
 
 	function renderComment() {
-		return commentList.data.map((item, index) => {
+		return tmpListComment.map((item, index) => {
 			return (
 				<Comment key={index} currentTime={item.currentTime} inforComment={item.inforComment} />
 			)
@@ -660,6 +687,9 @@ function Detail({ productDetail, productListSame, commentList, addToCart, addCom
 						</div>
 						<div className="wrap-render-list-comment">
 							{renderComment()}
+							<div className="container-page">
+									{renderNumberPage()}
+								</div>
 						</div>
 					</div>
 				</div>

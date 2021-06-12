@@ -16,16 +16,18 @@ function Header({ userInfo, logout, shoppingCart, numberCart }) {
 	if (shoppingCart.data.length > 0) {
 		renderListCart = shoppingCart.data.map((item, index) => {
 			return (
-				<div className="sub-cart" key={index+112} >
-					<div className="cart-header-image">
-						<img src={item.image} alt="pic" />
+				<Link to={`/product/${item.id}`} key={index+112} >
+					<div className="sub-cart" >
+						<div className="cart-header-image">
+							<img src={item.image} alt="pic" />
+						</div>
+						<div className="description-sub">
+							<div className="cart-header-name">{item.name} {item.productOptions && item.productOptions.memory}</div>
+							<div>{"Số lượng: " + item.quantity}</div>
+							<div>{Object.keys(item.productOptions).length > 0 ? (item.price + item.productOptions.price).toLocaleString('vi', { style: 'currency', currency: 'VND' }) : item.price.toLocaleString('vi', { style: 'currency', currency: 'VND' }) }</div>
+						</div>
 					</div>
-					<div className="description-sub">
-						<div className="cart-header-name">{item.name} {item.productOptions && item.productOptions.memory}</div>
-						<div>{"Số lượng: " + item.quantity}</div>
-						<div>{Object.keys(item.productOptions).length > 0 ? (item.price + item.productOptions.price).toLocaleString('vi', { style: 'currency', currency: 'VND' }) : item.price.toLocaleString('vi', { style: 'currency', currency: 'VND' }) }</div>
-					</div>
-				</div>
+				</Link>
 			)
 		})
 	} else {

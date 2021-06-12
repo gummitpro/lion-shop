@@ -111,7 +111,7 @@ function* registerSaga(action) {
       if (result.data) {
         yield openNotificationWithIcon('success', 'Đăng ký thành công')
 
-        yield window.location.replace("http://localhost:3000/dang-nhap");
+        yield (window.location.replace("http://localhost:3000/dang-nhap"));
 
         yield put({ // đợi rồi mới chạy
           type: "REGISTER_SUCCESS",

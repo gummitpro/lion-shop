@@ -19,51 +19,46 @@ function Index({ productListSearch, searchAction }) {
 
 	const [productListSearchs, setProductListSearchs] = useState(productListSearch.data)
 	
-	const arrNumberPage = [];
-
-	// ----------------------
-	
-	// const [post, setPost] = useState([]);
-	// const [currentPage, setCurrentPage] = useState(1)
-	// const [postPerPage, setPostPerPage] = useState(10)
-	// setPost(productListSearch.data)
-
-	// console.log("arrNumberPage: ", post);
-	// ----------------------
-	for(let i = 1;i<=Math.ceil(productListSearch.data.length/20);i++){
-		arrNumberPage.push(i)
-	}
-	const [ttt, setTTT] = useState(productListSearchs)
-	console.log("ttt", productListSearchs)
-	const currentListSearch = productListSearchs.slice(1 * 2 - 2, 20)
-	console.log("currentListSearch: ", currentListSearch) 
-
-	
-	function renderNumber(){
-		return arrNumberPage.map((item, index) => {
-			return (
-				<a>{item}</a>
-			)
-		})
-	}
-
-	const marks = {
-		// 0: 0,
-		// 100000000: {
-		//   style: {
-		// 	 color: '#f50',
-		//   },
-		//   label: <strong>100000000</strong>,
-		// },
-	 };
+	const [page, setPage] = useState(1)
 
 	useEffect(() => {
-		setProductListSearchs(productListSearch.data)
+		setProductListSearchs(renderListByPage(page))
 	}, [productListSearch.data])
 
 	useEffect(() => {
 		searchAction({ search: parsed.q })
 	}, [parsed.q])
+
+	const arrNumberPage = [];
+
+	for(let i = 1;i<=Math.ceil(productListSearch.data.length/20);i++){
+		arrNumberPage.push(i)
+	}
+	
+	function renderListByPage(page){
+		const newArr = [...productListSearch.data]
+		// console.log("ttt", productListSearch.data)
+		const currentListSearch = newArr.slice(20 * (page - 1), 20 * page)//  limit * (currenpge - 1) + 1
+		// console.log("currentListSearch: ", currentListSearch) 
+		return currentListSearch
+	}
+
+	console.log("page: ", page)
+	function clickPage(page){
+		setProductListSearchs(renderListByPage(page))
+	}
+
+	function renderNumber(){
+		
+		return arrNumberPage.map((item, index) => {
+			return (
+				<a 
+				onClick={()=>{
+					clickPage(item)
+				}} key={index}>{item}</a>
+			)
+		})
+	}
 
 	function sortASC() {
 		const dataToSort = [...productListSearchs];
@@ -148,7 +143,6 @@ function Index({ productListSearch, searchAction }) {
 										{ priceSort.endValue.toLocaleString('vi', { style: 'currency', currency: 'VND' })}</p>
 									<Slider
 										range
-										marks={marks}
 										step={500000}
 										max={100000000}
 										defaultValue={[0, 50000000]}

@@ -25,7 +25,15 @@ function Index({ shoppingCart, userInfo, paymentTask }) {
 		
 	});
 	
-	const [errors, setErrors] = useState({})
+	const [errors, setErrors] = useState({
+		name		: '',
+		phone		: '',
+		city		: '', // thanh pho
+		district : '', // quận / huyện 
+		wards		: '', // phường xã
+		village	: '', // thôn (dc chi tiet)
+		noteOrder: '',
+	})
 	
 	const [countries, setCountries] = useState([]);
 	const [districtss, setDistrict] = useState([]);
@@ -134,8 +142,92 @@ function Index({ shoppingCart, userInfo, paymentTask }) {
 		return datetime;
 	}
 
+	function handelPayment(){
+		let isValid = true;
+		const newChangeError = {
+			name		: '',
+			phone		: '',
+			city		: '', // thanh pho
+			district : '', // quận / huyện 
+			wards		: '', // phường xã
+			village	: '', // thôn (dc chi tiet)
+			noteOrder: '',
+		}
+
+		if(!values.name ){
+			isValid = false;
+			newChangeError.name = "Vui lòng nhập tên";
+			
+		}else{
+			newChangeError.name = ""
+		}
+	
+		if(!values.phone ){
+			isValid = false;
+			newChangeError.phone = "Vui lòng nhập số điện thoại";
+		}else if(!/((09|03|07|08|05)+([0-9]{8})\b)/g.test(values.phone)){
+			isValid = false;
+			newChangeError.phone = "Số điện thoại không hợp lệ"
+		}else{
+			newChangeError.phone = ""
+		}
+	
+		if(!values.city ){
+			isValid = false;
+			newChangeError.city = "Vui lòng chọn thành phố hoặc tỉnh";
+		}else{
+			newChangeError.city = ""
+		}
+	
+		if(!values.district){
+			isValid = false;
+			newChangeError.district = "Vui lòng chọn quận hoặc huyện";	
+		}else{
+			newChangeError.district = ""
+		}
+	
+		if(!values.wards ){
+			isValid = false;
+			newChangeError.wards = "Vui lòng chọn phường hoặc xã";
+		}else{
+			newChangeError.wards = ""
+		}
+	
+		if(!values.village ){
+			isValid = false;
+			newChangeError.village = "Vui lòng nhập thôn hoặc số nhà";
+		}else{
+			newChangeError.village = ""
+		}
+
+
+		if (isValid) {
+			console.log("values input: ", values);
+			setErrors({ ...newChangeError })
+			paymentTask({
+				consigneeInfor: {
+					...values,
+					city: values.city.split("/")[1],
+					district: values.district.split("/")[1],
+					wards: values.wards.split("/")[1]
+				}, 
+				userId: userInfo.data.id,
+				cart: shoppingCart.data,
+				payment: false,
+				status: 1,
+				currentTime: getCurrentTime(),
+				totalOrder: totalFinalMoney
+			})
+			localStorage.removeItem("shoppingCart");
+			history.push(`/thanh-toan-thanh-cong`)
+
+		} else {
+			setErrors({ ...newChangeError })
+		}
+	}
+
 	function isEmpty_ (obj) {
-		return Object.keys(obj).find((k) => obj[k] === "" || obj[k] === undefined)
+		return Object.keys(obj).find((k) => obj[k] === "")
 		// return Object.values(obj).findIndex(element => element !== "");
   	}
 
@@ -247,33 +339,7 @@ function Index({ shoppingCart, userInfo, paymentTask }) {
 										<p>Thành tiền</p>
 										<p className="sumary-money">{(totalFinalMoney = totalMoney + 50000).toLocaleString('vi', { style: 'currency', currency: 'VND' })}</p>
 									</div>
-									<button className="btn-payment" onClick={() => {
-										if(!isEmpty_(errors)){
-											// console.log("123", isEmpty_(errors))
-											// console.log("errors 22: ", errors)
-											setErrors(validation(values))
-										}else{ 
-
-											// console.log("456")
-											setValues( {...values});
-											paymentTask({
-												consigneeInfor: {
-													...values,
-													city: values.city.split("/")[1],
-													district: values.district.split("/")[1],
-													wards: values.wards.split("/")[1]
-												}, 
-												userId: userInfo.data.id,
-												cart: shoppingCart.data,
-												payment: false,
-												status: 1,
-												currentTime: getCurrentTime(),
-												totalOrder: totalFinalMoney
-											})
-											localStorage.removeItem("shoppingCart");
-											history.push(`/thanh-toan-thanh-cong`)
-										} 
-									}}>
+									<button className="btn-payment" onClick={() => {handelPayment();}}>
 										Thanh toán ngay
 									</button>
 								</div>

@@ -49,7 +49,7 @@ function Register({registerTask}) {
 		if (values.email.length === 0) {
 			isValid = false;
 			newChangeError.email = "Vui lòng nhập mật khẩu cũ !";
-		} else if(!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(values.email)){
+		} else if(!/.+@.+\.[A-Za-z]+$/.test(values.email)){
 			isValid = false;
 			newChangeError.email = "Email không hợp lệ"
 		}else {

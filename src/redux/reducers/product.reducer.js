@@ -252,6 +252,9 @@ export default function productReducer(state = initialState, action) {
                   check = true;
                 }else{
                   checkQuantity = true;
+                  if(item.quantity >= item.inventory){
+                    openCustomNotificationWithIcon('error')
+                  }
                 }
                 
               }
@@ -262,11 +265,13 @@ export default function productReducer(state = initialState, action) {
                 openCustomNotificationWithIcon('success')
                 state.shoppingCart.data[key].quantity++;
                 check = true;
-              }else{
+              }else {
                 checkQuantity = true;
+                if(item.quantity >= item.inventory){
+                  openCustomNotificationWithIcon('error')
+                }
                 console.log("không hợp lệ")
               }
-             
             }
           }
         });
@@ -395,13 +400,16 @@ export default function productReducer(state = initialState, action) {
     case 'ADD_COMMENT_SUCCESS': {
       const { data } = action.payload
       console.log("ADD_COMMENT_SUCCESSL:  ", action.payload)
-      const newArr = [...state.commentList.data];
-      newArr.push(data);
+      let newArr = [...state.commentList.data];
+      // if(state.commentList.data.length === 5){
+      //   newArr.length = 4
+      // }
+      newArr.unshift(data);
       return {
         ...state,
         commentList: {
           ...state.commentList,
-          data: [data, ...state.commentList.data ],
+          data: newArr,
           load: false,
         }
       }

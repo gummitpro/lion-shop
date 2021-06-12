@@ -50,7 +50,7 @@ function* getCommentListSaga(action) {
 		const { id } = action.payload;
 		const result = yield axios({
 		  method: 'GET',
-		  url: URL + '/comments?productId='+id+ '&_sort=id&_order=desc&_page=1&_limit=5'
+		  url: URL + '/comments?productId='+id+ '&_sort=id&_order=desc'
 		});
 		yield put({
 		  type: "GET_COMMENT_SUCCESS",

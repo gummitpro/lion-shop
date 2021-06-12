@@ -7,9 +7,31 @@ import Header from '../commom/Header';
 import Footer from '../commom/Footer';
 import validation from './validation';
 
+import { notification } from 'antd';
+
 import { loginAction } from '../../redux/actions';
 
-
+const getNotificationStyle = type => {
+	return {
+	  success: {
+		 color: 'rgba(0, 0, 0, 0.65)',
+		 border: '1px solid #b7eb8f',
+		 backgroundColor: '#f6ffed'
+	  },
+	  error: {
+		 color: 'rgba(0, 0, 0, 0.65)',
+		 border: '1px solid #ffa39e',
+		 backgroundColor: '#fff1f0'
+	  }
+	}[type]
+ }
+ const openCustomNotificationWithIcon = type => {
+	notification[type]({
+	  message: "Đang cập nhật",
+	  style: getNotificationStyle(type),
+	  duration: 2
+	})
+ }
 function Login({loginTask, userInfo, location}) {
 	
 	const [values, setValues] = useState({
@@ -84,7 +106,7 @@ function Login({loginTask, userInfo, location}) {
 							<label htmlFor="email" className="sign-in-label">Email</label>
 							<input
 								id="email"
-								type="email"
+								type="text"
 								name="email"
 								className="sign-in-input"
 								placeholder="Nhập email của bạn"
@@ -106,8 +128,8 @@ function Login({loginTask, userInfo, location}) {
 							{errors.password && <p className="error">{errors.password}</p>}
 						</div>
 						<div className="btn-form-sign-in">
-							<p className="error" style={{textAlign:"center"}}>{userInfo.error}</p>
-							<button className="sign-in-submit" type="submit">
+							{/* <p className="error" style={{textAlign:"center"}}>{userInfo.error}</p> */}
+							<button className="sign-in-submit">
 								Đăng nhập
 							</button>
 							<div style={{display: "flex", justifyContent: "space-between"}}>
@@ -117,11 +139,11 @@ function Login({loginTask, userInfo, location}) {
 
 						</div>
 						<div className="sign-in-or"><span></span></div>
-						<button className="sign-in-social-google">
+						<button className="sign-in-social-google" type="button" onClick={()=> openCustomNotificationWithIcon("error")}>
 							<i className="fa fa-google sign-in-social-google-icon"></i>
 							<span className="sign-in-social-google-text">Đăng nhập bằng Google</span>
 						</button>
-						<button className="sign-in-social-facebook">
+						<button className="sign-in-social-facebook" type="button" onClick={()=> openCustomNotificationWithIcon("error")}>
 							<i className="fa fa-facebook sign-in-social-facebook-icon"></i>
 							<span className="sign-in-social-facebook-text">Đăng nhập bằng Facebook</span>
 						</button>

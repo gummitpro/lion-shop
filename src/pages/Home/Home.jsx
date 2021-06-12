@@ -180,7 +180,7 @@ function Home({ getProductList, productList }) {
 
 							<div className="menu-category">
 								<ul>
-									<li onClick={() => { history.push(`/search?q=dien+thoai`) }}>
+									<li onClick={() => { history.push(`/search?q=laptop`) }}>
 										<div className="icon-left">
 											<i className="fal fa-mobile-android"></i>
 										</div>
@@ -188,7 +188,7 @@ function Home({ getProductList, productList }) {
 										Laptop và Macbook
 										</div>
 									</li>
-									<li onClick={() => { history.push(`/search?q=laptop`) }}>
+									<li onClick={() => { history.push(`/search?q=dien+thoai`) }}>
 										<div className="icon-left">
 											<i className="fal fa-laptop"></i>
 										</div>
@@ -250,10 +250,10 @@ function Home({ getProductList, productList }) {
 							</div>
 
 							<div className="header-sub">
-								<div className="li-submenu" onClick={() => { history.push(`/search?q=dien+thoai`) }}>
+								<div className="li-submenu" onClick={() => { history.push(`/search?q=laptop`) }}>
 									Laptop và Macbook
 								</div>
-								<div className="li-submenu" onClick={() => { history.push(`/search?q=laptop`) }}>
+								<div className="li-submenu" onClick={() => { history.push(`/search?q=dien+thoai`) }}>
 									Điện thoại
 								</div>
 								<div className="li-submenu" onClick={() => { history.push(`/search?q=tivi`) }}>
@@ -272,13 +272,13 @@ function Home({ getProductList, productList }) {
 
 							<div className="wrap-banner-product">
 								<div className="banner-product" >
-									<h1>Laptop và Macbook</h1>
+								<h1>Điện thoại</h1>
+									
 									<Slider {...settings}>
 										{renderProductCategory(2)}
 									</Slider>
 								</div>
 							</div>
-
 							<div className="banner">
 								<a href="">
 									<img src="https://hoanghamobile.com/Uploads/2021/04/16/banner-iphone-12-mini-1200-140.gif" alt="name" />
@@ -286,7 +286,7 @@ function Home({ getProductList, productList }) {
 							</div>
 							<div className="wrap-banner-product">
 								<div className="banner-product">
-									<h1>Điện thoại</h1>
+								<h1>Laptop và Macbook</h1>
 									<Slider {...settings}>
 										{renderProductCategory(1)}
 									</Slider>
